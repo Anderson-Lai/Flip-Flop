@@ -1,0 +1,10 @@
+# builder folders
+out/
+bin/
+build/
+
+# settings
+.vs/
+.idea/
+.vscode/
+CMakePresets.json
