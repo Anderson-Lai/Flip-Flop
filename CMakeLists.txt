@@ -18,15 +18,20 @@ file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${PROJECT_NAME} 
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/json"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/json/"
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/"
 )
 
-find_library(CURL_LIB NAMES libcurl REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/")
-target_link_libraries(${PROJECT_NAME} PUBLIC ${CURL_LIB})
+# link all .lib files
+file(GLOB_RECURSE LIB_FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.lib")
+foreach(LIB_FILE ${LIB_FILES})
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${LIB_FILE})
+endforeach()
 
+# copy all dlls to output directory
+file(GLOB_RECURSE DLL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.dll")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	"${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/libcurl.dll"
+	${DLL_FILES} 
 	$<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
