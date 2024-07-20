@@ -7,8 +7,8 @@ if (POLICY CMP0141)
 endif()
 
 
-project(add_project_name)
-set(PROJECT_NAME add_project_name)
+project(FlipFlop)
+set(PROJECT_NAME FlipFlop)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
