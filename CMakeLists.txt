@@ -16,7 +16,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/project/")
+target_include_directories(${PROJECT_NAME} 
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/json"
+	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+)
 
-#find_library(CURL_LIB NAMES curl REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/")
-#target_link_libraries(${PROJECT_NAME} ${CURL_LIB})
+find_library(CURL_LIB NAMES libcurl REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/")
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CURL_LIB})
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	"${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/libcurl.dll"
+	$<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
