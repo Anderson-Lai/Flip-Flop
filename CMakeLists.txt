@@ -14,8 +14,8 @@ else ()
 endif()
 
 # project name
-project("FlipFlop")
-set(PROJECT_NAME "FlipFlop")
+project(FlipFlop)
+set(PROJECT_NAME FlipFlop)
 
 # set c++ standard
 set(CMAKE_CXX_STANDARD 20)
@@ -25,18 +25,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(wxWidgets REQUIRED COMPONENTS core base)
 find_package(CURL REQUIRED)
 
+# get the cmake script provided by wxWidgets
 include(${wxWidgets_USE_FILE})
 
 # adding .cpp files
-file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/project/*.cpp")
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp")
+add_executable(${PROJECT_NAME} WIN32 ${SRC_FILES})
 
 # adding .h and .hpp files
 target_include_directories(${PROJECT_NAME} 
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
         "${CMAKE_CURRENT_SOURCE_DIR}/include/json/"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/widgets/"
+        "${wxWidgets_INCLUDE_DIRS}"
 )
 
 # linking libraries

@@ -11,14 +11,14 @@ As of now, it is windows only
 - open command prompt
 - type in "setx VCPKG_ROOT_DIRECTORY path/to/vcpkg" (ensure you use '/' and not '\\' even on windows)
 #### Install depdencies with vcpkg
-- open command prompt
 - cd path/to/vcpkg
 - vcpkg install wxwidgets
 - vcpkg install curl
 - vcpkg integrate install
 #### Build the project
-- Run the following commands at the projects root directory
+- Run the following commands at the projects root directory:
 - mkdir build
 - cd build
 - cmake ..
-- use visual studio to open the .sln file and press Ctrl + F5 to build
+- cmake --build . 
+- or use visual studio to open the .sln file and press Ctrl + F5 to build
