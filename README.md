@@ -7,7 +7,7 @@ As of now, it is windows only
 - git clone https://github.com/microsoft/vcpkg.git
 - cd vcpkg
 - .\bootstrap-vcpkg.bat
-Add vcpkg as an environment variable
+#### Add vcpkg as an environment variable
 - open command prompt
 - type in "setx VCPKG_ROOT_DIRECTORY path/to/vcpkg" (ensure you use '/' and not '\\' even on windows)
 #### Install depdencies with vcpkg
