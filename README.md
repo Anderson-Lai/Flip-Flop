@@ -17,9 +17,7 @@ As of now, it is windows only
 - vcpkg install curl
 - vcpkg integrate install
 #### Build the project
-- open command prompt
-- ensure you are at this project's root directory
-- run the following commands:
+- Run the following commands at the projects root directory
 - mkdir build
 - cd build
 - cmake ..
