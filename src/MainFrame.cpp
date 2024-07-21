@@ -1,5 +1,7 @@
 #include "MainFrame.h"
 
+//#include "Pricing.h"
+
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
 	wxPanel* mainPanel = new wxPanel(this);

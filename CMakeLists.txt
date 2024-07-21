@@ -23,23 +23,31 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # dependencies
 find_package(wxWidgets REQUIRED COMPONENTS core base)
-find_package(CURL REQUIRED)
+#find_package(CURL REQUIRED)
 
 # get the cmake script provided by wxWidgets
 include(${wxWidgets_USE_FILE})
 
+# getting pricing library
+include(FetchContent)
+
+FetchContent_Declare(
+    PricingLibrary
+    GIT_REPOSITORY https://github.com/Anderson-Lai/Pricing-Library.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(PricingLibrary)
+
 # adding .cpp files
-file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp")
+file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_executable(${PROJECT_NAME} WIN32 ${SRC_FILES})
 
 # adding .h and .hpp files
 target_include_directories(${PROJECT_NAME} 
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/json/"
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/widgets/"
         "${wxWidgets_INCLUDE_DIRS}"
 )
 
 # linking libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} CURL::libcurl)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} PricingLibrary)
