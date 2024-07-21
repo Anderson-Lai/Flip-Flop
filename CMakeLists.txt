@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.12)
+﻿cmake_minimum_required(VERSION 3.28)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -6,32 +6,38 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
+# target vcpkg
+if (DEFINED ENV{VCPKG_ROOT_DIRECTORY})
+	set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT_DIRECTORY}/scripts/buildsystems/vcpkg.cmake")
+else ()
+	message(FATAL_ERROR "Environment variable VCPKG_ROOT_DIRECTORY is not defined. Point it to where vcpkg is installed")
+endif()
 
-project(FlipFlop)
-set(PROJECT_NAME FlipFlop)
+# project name
+project("FlipFlop")
+set(PROJECT_NAME "FlipFlop")
 
+# set c++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+# dependencies
+find_package(wxWidgets REQUIRED COMPONENTS core base)
+find_package(CURL REQUIRED)
 
+include(${wxWidgets_USE_FILE})
+
+# adding .cpp files
+file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/project/*.cpp")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+# adding .h and .hpp files
 target_include_directories(${PROJECT_NAME} 
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/json/"
-	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+    PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/json/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/"
 )
 
-# link all .lib files
-file(GLOB_RECURSE LIB_FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.lib")
-foreach(LIB_FILE ${LIB_FILES})
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${LIB_FILE})
-endforeach()
-
-# copy all dlls to output directory
-file(GLOB_RECURSE DLL_FILES "${CMAKE_CURRENT_SOURCE_DIR}/lib/*.dll")
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	${DLL_FILES} 
-	$<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
+# linking libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} CURL::libcurl)
