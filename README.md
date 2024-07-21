@@ -7,9 +7,9 @@ As of now, it is windows only
 - git clone https://github.com/microsoft/vcpkg.git
 - cd vcpkg
 - .\bootstrap-vcpkg.bat
-##### Add it as an environment variable
+Add vcpkg as an environment variable
 - open command prompt
-- type in "setx VCPKG_ROOT_DIRECTORY path/to/vcpkg (ensure you use '/' and not '\' even on windows)"
+- type in "setx VCPKG_ROOT_DIRECTORY path/to/vcpkg" (ensure you use '/' and not '\\' even on windows)
 #### Install depdencies with vcpkg
 - open command prompt
 - cd path/to/vcpkg
@@ -17,6 +17,9 @@ As of now, it is windows only
 - vcpkg install curl
 - vcpkg integrate install
 #### Build the project
+- open command prompt
+- ensure you are at this project's root directory
+- run the following commands:
 - mkdir build
 - cd build
 - cmake ..
