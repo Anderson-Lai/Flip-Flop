@@ -1,7 +1,7 @@
 ## Flip-Flop is an open-source hypixel skyblock auction flipping mod
 As of now, it is windows only
 
-### How to build (run all command in command prompt):
+### How to build (run all commands in command prompt):
 Ensure you already have cmake and a C++ compiler installed <br />
 These steps use the MSVC C++ compiler <br />
 Download cmake here: https://cmake.org/download/ <br />
