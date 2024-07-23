@@ -31,12 +31,14 @@ include(${wxWidgets_USE_FILE})
 # getting pricing library
 include(FetchContent)
 
+# ensure library name is the same as project(libname) in the library cmake project
 FetchContent_Declare(
-    PricingLibrary
+    pricinglibrary
     GIT_REPOSITORY https://github.com/Anderson-Lai/Pricing-Library.git
     GIT_TAG master
 )
-FetchContent_MakeAvailable(PricingLibrary)
+# internally calls add_subdirectory
+FetchContent_MakeAvailable(pricinglibrary)
 
 # adding .cpp files
 file(GLOB_RECURSE SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
@@ -47,7 +49,20 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/include/project/"
         "${wxWidgets_INCLUDE_DIRS}"
+    PRIVATE
+    # <lowercasename>_SOURCE_DIR points to root directory of fetched lib
+        "${pricinglibrary_SOURCE_DIR}/include/public/"
 )
 
 # linking libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} PricingLibrary)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${wxWidgets_LIBRARIES} pricinglibrary)
+
+# compiler flags
+if (MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		$<$<CONFIG:Debug>:/MDd>
+		$<$<CONFIG:Release>:/MD>
+	)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	target_compile_options(${PROJECT_NAME} PRIVATE -pthread)
+endif()
